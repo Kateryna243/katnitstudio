@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KATNIT — Студія Творчих Майстер-Класів</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #FDFBF7;
+            --bg-card: #FFFFFF;
+            --primary: #C88D79;
+            --primary-hover: #B27763;
+            --text-dark: #3D3531;
+            --text-muted: #7A726D;
+            --accent-soft: #F4EBE1;
+            --border-color: #EADFD5;
+            --font-heading: 'Marcellus', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        /* Header */
+        .header {
+            background-color: var(--bg-main);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex; justify-content: space-between; align-items: center; height: 80px;
+        }
+
+        .logo {
+            font-family: var(--font-heading); font-size: 26px; text-decoration: none;
+            color: var(--text-dark); font-weight: bold; cursor: pointer;
+        }
+
+        .logo span { color: var(--primary); font-size: 18px; margin-left: 4px; }
+
+        .nav-links a {
+            text-decoration: none; color: var(--text-muted); margin: 0 15px;
+            font-weight: 500; transition: color 0.3s; cursor: pointer;
+        }
+
+        .nav-links a.active, .nav-links a:hover { color: var(--primary); }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
+        .lang-btn {
+            background: none; border: 1px solid var(--border-color); padding: 6px 12px;
+            border-radius: 20px; cursor: pointer; font-weight: 600; color: var(--text-dark);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 22px; border-radius: 30px; border: none; cursor: pointer;
+            font-weight: 500; text-decoration: none; display: inline-block; transition: all 0.3s;
+        }
+        .btn-primary { background-color: var(--primary); color: #FFF; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: var(--accent-soft); color: var(--text-dark); }
+
+        /* SPA Pages */
+        .page-section { display: none; padding: 60px 20px; flex: 1; }
+        .page-section.active { display: block; }
+        .page-title { font-family: var(--font-heading); font-size: 36px; text-align: center; margin-bottom: 40px; }
+
+        /* Home Page Specific */
+        .hero {
+            padding: 100px 0; text-align: center;
+            background: radial-gradient(circle, rgba(244,235,225,0.6) 0%, rgba(253,251,247,1) 100%);
+        }
+        .hero h1 { font-family: var(--font-heading); font-size: 44px; margin-bottom: 20px; }
+        .hero p { color: var(--text-muted); font-size: 18px; max-width: 600px; margin: 0 auto 30px; }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; }
+        
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
+        .feature-card { background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color); text-align: center; }
+        .feature-card h3 { font-family: var(--font-heading); margin-bottom: 10px; }
+
+        /* Workshops Specific */
+        .filter-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
+        .filter-btn { background: var(--accent-soft); border: none; padding: 8px 18px; border-radius: 20px; cursor: pointer; }
+        .filter-btn.active { background: var(--primary); color: #FFF; }
+        
+        .workshop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .workshop-card { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); }
+        .card-img { height: 200px; background-size: cover; background-position: center; }
+        .card-content { padding: 20px; }
+        .badge { background: var(--accent-soft); color: var(--primary); font-size: 12px; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+        .card-content h3 { font-family: var(--font-heading); margin: 10px 0; }
+        .details { font-size: 14px; color: var(--text-muted); margin-bottom: 15px; }
+
+        /* About Specific */
+        .about-text { text-align: center; max-width: 800px; margin: 0 auto 40px; font-size: 18px; color: var(--text-muted); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .gallery-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .review-card { background: var(--accent-soft); padding: 25px; border-radius: 16px; }
+
+        /* Contacts Specific */
+        .contacts-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .contact-form-card form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px;}
+        input, select, textarea { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-family: var(--font-body); }
+
+        /* Footer */
+        .footer { background: var(--bg-card); border-top: 1px solid var(--border-color); padding: 25px 0; text-align: center; font-size: 14px; color: var(--text-muted); margin-top: auto; }
+        .footer a { color: var(--primary); text-decoration: none; }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: 16px; width: 90%; max-width: 400px; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; }
+        .modal form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Навігація -->
+    <header class="header">
+        <div class="container nav-container">
+            <a class="logo" onclick="nav('home')">KATNIT<span>Studio</span></a>
+            <nav class="nav-links">
+                <a onclick="nav('home')" class="nav-item active" data-target="home" data-lang-uk="Головна" data-lang-en="Home">Головна</a>
+                <a onclick="nav('workshops')" class="nav-item" data-target="workshops" data-lang-uk="Майстер-класи" data-lang-en="Workshops">Майстер-класи</a>
+                <a onclick="nav('about')" class="nav-item" data-target="about" data-lang-uk="Про нас" data-lang-en="About Us">Про нас</a>
+                <a onclick="nav('contacts')" class="nav-item" data-target="contacts" data-lang-uk="Контакти" data-lang-en="Contacts">Контакти</a>
+            </nav>
+            <div class="header-actions">
+                <button id="lang-toggle" class="lang-btn">EN</button>
+                <button class="btn btn-primary open-modal" data-lang-uk="Записатися" data-lang-en="Book Now">Записатися</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- СТОРІНКА 1: ГОЛОВНА -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <div class="container">
+                    <h1 data-lang-uk="Відкрий свій творчий потенціал разом із KATNIT" data-lang-en="Unleash Your Creativity with KATNIT">Відкрий свій творчий потенціал разом із KATNIT</h1>
+                    <p data-lang-uk="Затишні майстер-класи з шиття, в'язання та ліпки з глини у теплій атмосфері." data-lang-en="Cozy workshops in sewing, knitting, and pottery in a warm, welcoming atmosphere.">Затишні майстер-класи з шиття, в'язання та ліпки з глини у теплій атмосфері.</p>
+                    <div class="hero-btns">
+                        <button onclick="nav('workshops')" class="btn btn-primary" data-lang-uk="Обрати майстер-клас" data-lang-en="Explore Workshops">Обрати майстер-клас</button>
+                        <button onclick="nav('about')" class="btn btn-secondary" data-lang-uk="Дізнатися більше" data-lang-en="Learn More">Дізнатися більше</button>
+                    </div>
+                </div>
+            </div>
+            <div class="features container">
+                <div class="feature-card">
+                    <h3>🧶 В'язання</h3>
+                    <p data-lang-uk="Створення затишних речей та аксесуарів власноруч." data-lang-en="Creating cozy clothes and handmade accessories.">Створення затишних речей та аксесуарів власноруч.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🪡 Шиття</h3>
+                    <p data-lang-uk="Основи крою, роботи з тканиною та базовий гардероб." data-lang-en="Basics of cutting, fabric handling, and capsule wardrobe.">Основи крою, роботи з тканиною та базовий гардероб.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏺 Глиняна пластика</h3>
+                    <p data-lang-uk="Створення авторської кераміки та релакс-терапія." data-lang-en="Crafting unique ceramics and soothing pottery relaxation.">Створення авторської кераміки та релакс-терапія.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- СТОРІНКА 2: МАЙСТЕР-КЛАСИ -->
+        <section id="workshops" class="page-section container">
+            <h1 class="page-title" data-lang-uk="Наші Майстер-класи" data-lang-en="Our Workshops">Наші Майстер-класи</h1>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all" data-lang-uk="Усі" data-lang-en="All">Усі</button>
+                <button class="filter-btn" data-filter="sewing" data-lang-uk="Шиття" data-lang-en="Sewing">Шиття</button>
+                <button class="filter-btn" data-filter="knitting" data-lang-uk="В'язання" data-lang-en="Knitting">В'язання</button>
+                <button class="filter-btn" data-filter="pottery" data-lang-uk="Глина" data-lang-en="Pottery">Глина</button>
+            </div>
+            <div class="workshop-grid">
+                <div class="workshop-card" data-category="sewing">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1528458909336-e7a0adfed0a5?auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="card-content">
+                        <span class="badge" data-lang-uk="Шиття" data-lang-en="Sewing">Шиття</span>
+                        <h3 data-lang-uk="Основи шиття: Еко-сумка" data-lang-en="Sewing Basics: Eco-Tote Bag">Основи шиття: Еко-сумка</h3>
+                        <p class="details" data-lang-uk="⏱️ 3 години | 📊 Початковий | 💰 800 грн" data-lang-en="⏱️ 3 hours | 📊 Beginner | 💰 800 UAH">⏱️ 3 години | 📊 Початковий | 💰 800 грн</p>
+                        <button class="btn btn-secondary open-modal" data-lang-uk="Забронювати" data-lang-en="Book Seat">Забронювати</button>
+                    </div>
+                </div>
+                <div class="workshop-card" data-category="knitting">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1584992236310-6edddc08acff?auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="card-content">
+                        <span class="badge" data-lang-uk="В'язання" data-lang-en="Knitting">В'язання</span>
+                        <h3 data-lang-uk="В'язання шарфа спицями" data-lang-en="Cozy Scarf Knitting">В'язання шарфа спицями</h3>
+                        <p class="details" data-lang-uk="⏱️ 2.5 години | 📊 Початковий | 💰 750 грн" data-lang-en="⏱️ 2.5 hours | 📊 Beginner | 💰 750 UAH">⏱️ 2.5 години | 📊 Початковий | 💰 750 грн</p>
+                        <button class="btn btn-secondary open-modal" data-lang-uk="Забронювати" data-lang-en="Book Seat">Забронювати</button>
+                    </div>
+                </div>
+                <div class="workshop-card" data-category="pottery">
+                    <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=600&q=80');"></div>
+                    <div class="card-content">
+                        <span class="badge" data-lang-uk="Глина" data-lang-en="Pottery">Глина</span>
+                        <h3 data-lang-uk="Ліпка авторської чашки" data-lang-en="Handmade Ceramic Mug">Ліпка авторської чашки</h3>
+                        <p class="details" data-lang-uk="⏱️ 2 години | 📊 Для всіх | 💰 950 грн" data-lang-en="⏱️ 2 hours | 📊 All Levels | 💰 950 UAH">⏱️ 2 години | 📊 Для всіх | 💰 950 грн</p>
+                        <button class="btn btn-secondary open-modal" data-lang-uk="Забронювати" data-lang-en="Book Seat">Забронювати</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СТОРІНКА 3: ПРО НАС -->
+        <section id="about" class="page-section container">
+            <h1 class="page-title" data-lang-uk="Про студію KATNIT" data-lang-en="About KATNIT Studio">Про студію KATNIT</h1>
+            <p class="about-text" data-lang-uk="KATNIT — це простір натхнення, тепла та гармонії. Ми створили місце, де кожен може відпочити від міської метушні, опанувати нові ремісничі навички та створити унікальні речі власноруч." data-lang-en="KATNIT is a space of inspiration, warmth, and creative harmony. We built a place where everyone can escape daily routines, master artisanal skills, and craft unique items by hand.">KATNIT — це простір натхнення, тепла та гармонії. Ми створили місце, де кожен може відпочити від міської метушні, опанувати нові ремісничі навички та створити унікальні речі власноруч.</p>
+            
+            <h2 data-lang-uk="Галерея робіт" data-lang-en="Gallery" style="text-align:center; margin-bottom:20px; font-family:var(--font-heading);">Галерея робіт</h2>
+            <div class="gallery-grid">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&q=80" alt="Work 1">
+                <img src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=500&q=80" alt="Work 2">
+                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=500&q=80" alt="Work 3">
+                <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=500&q=80" alt="Work 4">
+            </div>
+
+            <h2 data-lang-uk="Відгуки" data-lang-en="Reviews" style="text-align:center; margin-bottom:20px; font-family:var(--font-heading);">Відгуки</h2>
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <p data-lang-uk="«Неймовірна атмосфера! Майстер-клас із глини пройшов на одному подиху.»" data-lang-en="“Amazing atmosphere! The clay workshop went by in a flash.”">«Неймовірна атмосфера! Майстер-клас із глини пройшов на одному подиху.»</p>
+                    <span style="display:block; margin-top:10px; font-weight:bold;">— Олена М.</span>
+                </div>
+                <div class="review-card">
+                    <p data-lang-uk="«Дякую за терпіння майстрам. Тепер в'язання — моє улюблене хобі!»" data-lang-en="“Thank you for your patience. Knitting is officially my favorite hobby now!”">«Дякую за терпіння майстрам. Тепер в'язання — моє улюблене хобі!»</p>
+                    <span style="display:block; margin-top:10px; font-weight:bold;">— Анна К.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- СТОРІНКА 4: КОНТАКТИ -->
+        <section id="contacts" class="page-section container">
+            <h1 class="page-title" data-lang-uk="Наші Контакти" data-lang-en="Contact Us">Наші Контакти</h1>
+            <div class="contacts-wrapper">
+                <div class="contact-info">
+                    <h3 style="font-family:var(--font-heading); margin-bottom:15px; font-size:24px;">KATNIT Craft Studio</h3>
+                    <p style="margin-bottom:10px;">📍 <strong>Адреса:</strong> м. Київ, вул. Хрещатик, 15</p>
+                    <p style="margin-bottom:10px;">📞 <strong>Телефон:</strong> +380 (44) 123-45-67</p>
+                    <p style="margin-bottom:10px;">✉️ <strong>Email:</strong> <a href="mailto:k.kolesnyk@knute.edu.ua" style="color:var(--primary);">k.kolesnyk@knute.edu.ua</a></p>
+                    <p style="margin-bottom:10px;">⏰ <strong>Графік:</strong> Пн-Нд: 10:00 - 20:00</p>
+                </div>
+                <div class="contact-form-card">
+                    <h3 data-lang-uk="Напишіть нам" data-lang-en="Send us a Message" style="font-family:var(--font-heading); font-size:20px;">Напишіть нам</h3>
+                    <form onsubmit="event.preventDefault(); alert('Повідомлення надіслано!');">
+                        <input type="text" placeholder="Ім'я" required>
+                        <input type="email" placeholder="Email" required>
+                        <textarea placeholder="Повідомлення" rows="4" required></textarea>
+                        <button type="submit" class="btn btn-primary" data-lang-uk="Надіслати" data-lang-en="Send">Надіслати</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Підвал (Footer) -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Колесник Катерина (<a href="mailto:k.kolesnyk@knute.edu.ua">k.kolesnyk@knute.edu.ua</a>)</p>
+        </div>
+    </footer>
+
+    <!-- Модальне вікно бронювання -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('booking-modal').style.display='none'">&times;</span>
+            <h2 data-lang-uk="Запис на майстер-клас" data-lang-en="Book a Workshop" style="font-family:var(--font-heading);">Запис на майстер-клас</h2>
+            <form id="booking-form">
+                <input type="text" placeholder="Ваше ім'я" required>
+                <input type="email" placeholder="Email" required>
+                <select required>
+                    <option value="" disabled selected data-lang-uk="Оберіть напрямок" data-lang-en="Select Workshop">Оберіть напрямок</option>
+                    <option value="sewing" data-lang-uk="Шиття" data-lang-en="Sewing">Шиття</option>
+                    <option value="knitting" data-lang-uk="В'язання" data-lang-en="Knitting">В'язання</option>
+                    <option value="pottery" data-lang-uk="Ліпка з глини" data-lang-en="Pottery">Ліпка з глини</option>
+                </select>
+                <input type="date" required>
+                <button type="submit" class="btn btn-primary" data-lang-uk="Підтвердити" data-lang-en="Confirm">Підтвердити</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Логіка JavaScript -->
+    <script>
+        // 1. Навігація між сторінками
+        function nav(pageId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('data-target') === pageId) link.classList.add('active');
+            });
+            window.scrollTo(0, 0);
+        }
+
+        // 2. Перемикач мов
+        let currentLang = 'uk';
+        document.getElementById('lang-toggle').addEventListener('click', function() {
+            currentLang = currentLang === 'uk' ? 'en' : 'uk';
+            this.textContent = currentLang.toUpperCase();
+            document.querySelectorAll('[data-lang-uk]').forEach(el => {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = el.getAttribute(`data-lang-${currentLang}`);
+                } else {
+                    el.textContent = el.getAttribute(`data-lang-${currentLang}`);
+                }
+            });
+        });
+
+        // 3. Фільтрація майстер-класів
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const workshopCards = document.querySelectorAll('.workshop-card');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                workshopCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 4. Модальне вікно
+        const modal = document.getElementById('booking-modal');
+        document.querySelectorAll('.open-modal').forEach(btn => {
+            btn.addEventListener('click', () => modal.style.display = 'flex');
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+        document.getElementById('booking-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert(currentLang === 'uk' ? 'Дякуємо! Ваша заявка прийнята.' : 'Thank you! Booking confirmed.');
+            modal.style.display = 'none';
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
